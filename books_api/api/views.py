@@ -5,5 +5,5 @@ from .models import Author
 # Create your views here.
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
-    serializer_class  = serializers.AuthorSerializer 
+    serializer_class  = serializers.AuthorSerializer     
 
