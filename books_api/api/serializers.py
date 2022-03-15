@@ -18,6 +18,11 @@ class BookSerializer(ModelSerializer):
         model = Book
         fields = '__all__'  
     
+    def __init__(self, *args, **kwargs):        
+        if kwargs['context']['view'].action == 'list':
+            del self.fields['authors']
+        super().__init__(*args, **kwargs)
+
     def validate(self, data):     
         method = self.context.get('request').method         
         in_data = self.initial_data
