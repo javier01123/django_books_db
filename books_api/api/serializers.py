@@ -19,6 +19,16 @@ class BookSerializer(ModelSerializer):
         fields = '__all__'  
     
     def validate(self, data):     
-        if len(self.initial_data['authors']) == 0:            
+        method = self.context.get('request').method         
+        in_data = self.initial_data
+        has_authors_key = 'authors' in in_data
+        contains_authors = has_authors_key and len(in_data['authors']) > 0
+
+        """only allow null authors on PATCH"""        
+        if method == 'PATCH' and not has_authors_key:
+            return data
+
+        if not contains_authors:            
             raise serializers.ValidationError({'authors':'This field may not be blank.'}) 
+
         return data
