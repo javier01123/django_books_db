@@ -9,23 +9,21 @@ class BookSerializer(ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'       
-
-    def validate(self, data):  
-        authors = data.get('authors')                            
-        if not any(authors):            
+    def validate(self, data):                                  
+        if not any(data.get('authors')):            
             raise serializers.ValidationError({'authors':'This field may not be empty.'}) 
         return data
 
 class BookPatchSerializer(ModelSerializer):
     authors = serializers.PrimaryKeyRelatedField(many = True, queryset=Author.objects.all())
-
     class Meta:
         model = Book
         fields = '__all__' 
-
-    def validate(self, data):                   
-        authors = data.get('authors')
-        if authors and not any(authors):            
+    def validate(self, data):       
+        authors = data.get('authors')        
+        if authors is None:
+            return data
+        if not any(authors):            
             raise serializers.ValidationError({'authors':'This field may not be empty.'}) 
         return data
 
